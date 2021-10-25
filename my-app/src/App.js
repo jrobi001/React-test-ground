@@ -19,12 +19,12 @@ function App() {
   }
 
   return (
-    <div>
-      <AddUser onSuccessfulForm={handleSuccessfulForm}></AddUser>
+    <React.Fragment>
+      <AddUser onSuccessfulForm={handleSuccessfulForm} ></AddUser>
 
       <UsersList users={users}></UsersList>
 
-    </div>
+    </React.Fragment>
   );
 }
 
