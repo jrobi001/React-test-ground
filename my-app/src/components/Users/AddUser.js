@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import styles from './AddUser.module.css';
 import Card from "../UI/Card";
 import Button from "../UI/Button"
+import ErrorModal from "../UI/ErrorModal";
 
 
 const AddUser = (props) => {
 
     const [user, setUser] = useState("");
     const [age, setAge] = useState("");
-    // const [, set] = useState(initialState)
+    const [error, setError] = useState(null);
+
 
     const handleUsernameInput = (event) => {
         setUser(event.target.value);
@@ -21,22 +23,33 @@ const AddUser = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (user.trim().length === 0 || age.trim().length === 0) {
-            props.onInvalidForm();
+            // setError(false);
+            setError({
+                title: "Invalid Input",
+                message: "Name and age must not be empty",
+            });
+
         } else if (+age < 1) {
-            props.onInvalidForm();
+            // setError(false);
+            setError({
+                title: "Invalid Input",
+                message: "Age must be > 0",
+            });
+
         } else {
             props.onSuccessfulForm(user, age)
+            setUser('');
+            setAge('');
         }
-
-        setUser('');
-        setAge('');
     }
 
-
-
+    const handleCloseWarning = () => {
+        setError(null);
+    }
 
     return (
         <Card className={styles.input}>
+            {error && <ErrorModal title={error.title} message={error.message} handleClose={handleCloseWarning}></ErrorModal>}
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username" >User Name</label>
                 <input id="username" type="text" onChange={handleUsernameInput} value={user}></input>
@@ -44,10 +57,7 @@ const AddUser = (props) => {
                 <input id="age" type="number" onChange={handleAgeInput} value={age}></input>
                 <Button type="submit" >Add user</Button>
             </form>
-        </Card>
-    )
-
-};
-
+        </Card>)
+}
 
 export default AddUser;
